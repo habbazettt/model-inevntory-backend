@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
 SERVICE_NAME = "user-management"
+ENV = os.getenv("ENV")
 
 LOGGING = {
     "version": 1,
