@@ -6,9 +6,7 @@ class User(models.Model):
     full_name = models.CharField(max_length=150)
     username = models.CharField(max_length=150, unique=True)
     account_status = models.BooleanField(default=True)
-    ldap_dn = models.CharField(max_length=512)
-    ldap_checked_at = models.DateTimeField()
-    last_login = models.DateTimeField(null=True, blank=True)
+    last_login = models.DateTimeField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -90,7 +88,7 @@ class Model(models.Model):
     status = models.ForeignKey(ModelStatus, on_delete=models.PROTECT)
 
     model_name = models.CharField(max_length=200)
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True)
     model_type = models.CharField(max_length=200)
 
     initiator = models.ForeignKey(User, related_name="initiated_models", on_delete=models.PROTECT)
@@ -99,10 +97,10 @@ class Model(models.Model):
     second_approver = models.ForeignKey(User, related_name="second_approved_models", on_delete=models.PROTECT)
 
     version_name = models.CharField(max_length=50)
-    sop_document_path = models.TextField(null=True, blank=True)
+    sop_document_path = models.TextField(blank=True)
     model_file_path = models.TextField()
-    library_configuration_path = models.TextField(null=True, blank=True)
-    retirement_justification = models.TextField(null=True, blank=True)
+    library_configuration_path = models.TextField(blank=True)
+    retirement_justification = models.TextField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -131,7 +129,7 @@ class ExecutionResult(models.Model):
     executor = models.ForeignKey(User, on_delete=models.PROTECT)
 
     execution_status = models.TextField()
-    parameters = models.JSONField(null=True, blank=True)
+    parameters = models.JSONField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -184,7 +182,7 @@ class PreprocessedDataset(models.Model):
     creator = models.ForeignKey(User, on_delete=models.PROTECT)
 
     sql_script_path = models.TextField()
-    cached_file_path = models.TextField(null=True, blank=True)
+    cached_file_path = models.TextField(blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
