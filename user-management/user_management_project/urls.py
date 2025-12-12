@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path
-from users.views import HealthView
+from user_app.views import HealthView
 
 urlpatterns = [
     path("admin/", admin.site.urls),

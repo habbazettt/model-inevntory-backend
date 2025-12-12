@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     "corsheaders",
     
     # Local apps
-    "users",
+    "user_app",
 ]
 
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()

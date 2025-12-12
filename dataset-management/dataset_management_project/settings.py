@@ -24,9 +24,40 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'rest_framework',
+    'corsheaders',
+    
+    'dataset_app',
 ]
 
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+SERVICE_NAME = os.getenv("SERVICE_NAME")
+ENV = os.getenv("ENV")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "json": {
+            "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
+            "fmt": "%(asctime)s %(levelname)s %(name)s request_id=%(request_id)s user_id=%(user_id)s service=%(service)s env=%(env)s method=%(method)s path=%(path)s %(message)s",
+        }
+    },
+    "filters": {
+        "request_context": {
+            "()": "dataset_management_project.logging_filters.RequestContextFilter"
+        }
+    },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "json", "filters": ["request_context"]},
+    },
+    "root": {"handlers": ["console"], "level": LOG_LEVEL},
+    "loggers": {"django.request": {"handlers": ["console"], "level": "ERROR", "propagate": False}},
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -34,6 +65,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    "dataset_management_project.logging_middleware.RequestLoggingMiddleware",
 ]
 
 ROOT_URLCONF = 'dataset_management_project.urls'
@@ -54,18 +87,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'dataset_management_project.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -102,3 +123,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": [],
+}
